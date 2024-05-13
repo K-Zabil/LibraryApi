@@ -1,0 +1,39 @@
+version: '1'
+
+services:
+  bookapiapp:
+    image: bookapi
+    container_name: bookapiapp
+    depends_on:
+      - mongodb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 8081
+    ports:
+      - 8081:8080
+    networks:
+      - librarynetwork
+    restart: always
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    networks:
+      - librarynetwork
+    volumes:
+      - librarymongovolume:/data/db
+      - librarymongovolume:/data/configdb
+    restart: always  
+
+networks:
+  librarynetwork:
+    driver: bridge
+
+volumes:
+  librarymongovolume:
